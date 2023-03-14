@@ -10,14 +10,23 @@ class WarrantyInfoPage(BasePage):
     def __init__(self, driver):
         self.valid_sn = '1863552437'
         self.invalid_short_sn = '1'
-        self.invalid_long_sn = '111111111111111'
+        self.invalid_long_sn = '1111111111111111111111111111'
         self.sn_input = '//input[@id="SerialNumber"]'
         self.query_btn_css = '.btn-block'
         self.error_hint = '//span[@class="field-validation-error"]'
         self.accept_cookie_btn = '//button[@id="onetrust-accept-btn-handler"]'
 
         self.error_short_sn = 'Minimum 6 characters required'
+        self.error_long_sn = 'Please enter a valid serial number'
 
+        self.result_dl = '//dl[@class="c-result-title__dl"]'
+        self.correct_product_info = {
+            'description': 'CLICKSHARE CX-50 SET NA',
+            'part_number': 'R9861522NA',
+            'installation_date': '09/28/2020 00:00:00',
+            'warranty_end_date': '09/27/2021 00:00:00',
+            'service_contract_end_date': '01/01/0001 00:00:00'
+        }
         super().__init__(driver)
 
     def dismiss_cookie_popup(self):
