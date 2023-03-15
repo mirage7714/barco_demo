@@ -2,7 +2,7 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
-from pages.contact_page import ContactPage
+
 from selenium.webdriver.common.by import By
 import time
 
@@ -13,20 +13,28 @@ class WarrantyInfoPage(BasePage):
         self.invalid_long_sn = '1111111111111111111111111111'
         self.sn_input = '//input[@id="SerialNumber"]'
         self.query_btn_css = '.btn-block'
-        self.error_hint = '//span[@class="field-validation-error"]'
+        self.error_short_sn_hint = '//span[@data-bind="visible: showIsTooShort"]'
+        self.error_blank_sn_hint = '//span[@data-bind="visible: showIsRequired"]'
+        self.error_wrong_format_sn_hint = '//span[@data-bind="visible: showIsWrongFormat"]'
         self.accept_cookie_btn = '//button[@id="onetrust-accept-btn-handler"]'
 
         self.error_short_sn = 'Minimum 6 characters required'
+        self.error_blank_sn = 'Please specify a serial number'
         self.error_long_sn = 'Please enter a valid serial number'
 
-        self.result_dl = '//dl[@class="c-result-title__dl"]'
-        self.correct_product_info = {
-            'description': 'CLICKSHARE CX-50 SET NA',
-            'part_number': 'R9861522NA',
-            'installation_date': '09/28/2020 00:00:00',
-            'warranty_end_date': '09/27/2021 00:00:00',
-            'service_contract_end_date': '01/01/0001 00:00:00'
-        }
+        self.result_query_sn_css = '.c-result-tile__highlight'
+        self.result_dl_css = '.c-result-tile__dl'
+        self.result_image_css = '.o-aspect-ratio__element'
+        self.correct_product_info = [
+            'CLICKSHARE CX-50 SET NA',
+            'R9861522NA',
+            '09/28/2020 00:00:00',
+            '09/27/2021 00:00:00',
+            '01/01/0001 00:00:00'
+        ]
+        self.correct_product_img_url = "https://az877327.vo.msecnd.net/~/media/clickshare2020/images/product shots - transparent/cx-50_buttons_top png.png?v=1"
+
+
         super().__init__(driver)
 
     def dismiss_cookie_popup(self):
@@ -59,12 +67,36 @@ class WarrantyInfoPage(BasePage):
         element = self.driver.find_element(By.CSS_SELECTOR, self.query_btn_css)
         element.click()
 
-    def check_error_toast(self, msg):
-        #WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located((By.XPATH, self.error_hint)))
-        element = self.driver.find_element_by_xpath(self.error_hint)
-        print(element.text)
+    def check_error_toast(self, type, msg):
+        ele = ''
+        if type == 'blank':
+            ele = self.error_blank_sn_hint
+        elif type == 'short':
+            ele = self.error_short_sn_hint
+        elif type == 'long':
+            ele = self.error_wrong_format_sn_hint
+        element = self.driver.find_element_by_xpath(ele)
         assert element.text == msg
 
+    def verify_product_info(self):
+        WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.result_query_sn_css)))
+        WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.result_dl_css)))
+        WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.result_image_css)))
+        sn = self.driver.find_element(By.CSS_SELECTOR, self.result_query_sn_css)
+        assert sn.text == self.valid_sn
+
+        #assert img.get_attribute('src') == self.correct_product_img_url
+        element = self.driver.find_element(By.CSS_SELECTOR, self.result_dl_css)
+        dd = element.find_elements_by_xpath('//dd')
+        for m in range(len(dd)):
+            assert dd[m].text == self.correct_product_info[m]
+        img = self.driver.find_element(By.CSS_SELECTOR, self.result_image_css)
+        print(img.get_attribute('src'))
+    def verify_blank_sn_error(self):
+        self.check_error_toast('blank', self.error_blank_sn)
 
     def verify_short_sn_error(self):
-        self.check_error_toast(self.error_short_sn)
+        self.check_error_toast('short', self.error_short_sn)
+
+    def verify_long_sn_error(self):
+        self.check_error_toast('long', self.error_long_sn)
