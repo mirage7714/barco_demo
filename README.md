@@ -1,15 +1,20 @@
 # barco_demo
  Test cases for barco interview
  
- ## Test cases:  
- In the test case sheet, it contains the following test cases:   
- - Query for an invalid sn number  
- - Query for a valid sn number  
- - Query but no search result
- - The search log on server side  
- - The error code handling  
- - Operation under mobile web
- - Switch between different languages
+## Test cases:  
+In the test case sheet, it contains the following test cases:   
+- Query for an invalid sn number  
+- Query for a valid sn number  
+- Query but no search result
+- The search log on server side  
+- The error code handling  
+- Operation under mobile web
+- Switch between different languages
+ 
+## Issues:  
+During the testing, there are some defect:
+- In mobile web mode, the long sn will be cut on the border  
+- The Explore button will overlap with the sn title when the language is not en  
  
 ## Test structure:
 The test is using page-object pattern: it contains tests and pages.  
