@@ -4,7 +4,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 
 from selenium.webdriver.common.by import By
-import time
 
 class WarrantyInfoPage(BasePage):
     def __init__(self, driver):
@@ -30,8 +29,7 @@ class WarrantyInfoPage(BasePage):
             '09/27/2021 00:00:00',
             '01/01/0001 00:00:00'
         ]
-        self.correct_product_img_url = "https://az877327.vo.msecnd.net/~/media/clickshare2020/images/product shots - transparent/cx-50_buttons_top png.png?v=1"
-
+        self.correct_product_img_url = "https://az877327.vo.msecnd.net/~/media/clickshare2020/images/product%20shots%20-%20transparent/cx-50_buttons_top%20png.png?v=1"
 
         super().__init__(driver)
 
@@ -66,7 +64,6 @@ class WarrantyInfoPage(BasePage):
         element.click()
 
     def check_error_toast(self, type, msg):
-
         element = ''
         elements = self.driver.find_elements(By.XPATH, self.error_msg)
         for ele in elements:
@@ -80,14 +77,13 @@ class WarrantyInfoPage(BasePage):
         WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.result_image_css)))
         sn = self.driver.find_element(By.CSS_SELECTOR, self.result_query_sn_css)
         assert sn.text == self.valid_sn
-
-        #assert img.get_attribute('src') == self.correct_product_img_url
         element = self.driver.find_element(By.CSS_SELECTOR, self.result_dl_css)
         dd = element.find_elements(By.XPATH, '//dd')
         for m in range(len(dd)):
             assert dd[m].text == self.correct_product_info[m]
         img = self.driver.find_element(By.CSS_SELECTOR, self.result_image_css)
-        print(img.get_attribute('src'))
+        assert img.get_attribute('src') == self.correct_product_img_url
+
     def verify_blank_sn_error(self):
         self.check_error_toast('blank', self.error_blank_sn)
 

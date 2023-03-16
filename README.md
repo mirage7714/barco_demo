@@ -22,11 +22,14 @@ During the testing, there are some defect:
 - The Explore button will overlap with the sn title when the language is not en  
  
 ## Test structure:
-The test is using page-object pattern: it contains tests and pages  
-- Tests: contains all the test cases  
-- Pages: contains the elements and functions of the pages  
+The test is using page-object pattern: it contains tests and pages. Besides these two folders, there is another folder for test report:  
+- tests: contains all the test cases  
+- pages: contains the elements and functions of the pages  
+- reports: directory for test reports
 
 ## Automation test:  
 Steps for executing the automation test:  
 1. Enter the project folder, and install the required packages: `pip install -r requirement.txt`  
 2. Open IDE (I use PyCharm), and execute the `test_warranty.py` for testing  
+3. Or can use cmd tools and execute `pytest --html=reports/report.html` to run tests and create test report after execution  
+

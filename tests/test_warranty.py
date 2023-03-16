@@ -3,7 +3,7 @@ from pages.warranty_info_page import *
 import time
 
 class TestWarranty(BaseTest):
-    def successful_query_info(self):
+    def test_successful_query_info(self):
         warranty_info_page = WarrantyInfoPage(self.driver)
         warranty_info_page.dismiss_cookie_popup()
         warranty_info_page.search_valid_sn()
