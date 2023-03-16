@@ -13,9 +13,7 @@ class WarrantyInfoPage(BasePage):
         self.invalid_long_sn = '1111111111111111111111111111'
         self.sn_input = '//input[@id="SerialNumber"]'
         self.query_btn_css = '.btn-block'
-        self.error_short_sn_hint = '//span[@data-bind="visible: showIsTooShort"]'
-        self.error_blank_sn_hint = '//span[@data-bind="visible: showIsRequired"]'
-        self.error_wrong_format_sn_hint = '//span[@data-bind="visible: showIsWrongFormat"]'
+        self.error_msg = '//span[@class="field-validation-error"]'
         self.accept_cookie_btn = '//button[@id="onetrust-accept-btn-handler"]'
 
         self.error_short_sn = 'Minimum 6 characters required'
@@ -42,7 +40,7 @@ class WarrantyInfoPage(BasePage):
         WebDriverWait(self.driver, self.timeout).until(EC.invisibility_of_element_located((By.XPATH, self.accept_cookie_btn)))
 
     def type_sn(self, sn):
-        element = self.driver.find_element_by_xpath(self.sn_input)
+        element = self.driver.find_element(By.XPATH, self.sn_input)
         element.click()
         element.clear()
         element.send_keys(sn)
@@ -68,14 +66,12 @@ class WarrantyInfoPage(BasePage):
         element.click()
 
     def check_error_toast(self, type, msg):
-        ele = ''
-        if type == 'blank':
-            ele = self.error_blank_sn_hint
-        elif type == 'short':
-            ele = self.error_short_sn_hint
-        elif type == 'long':
-            ele = self.error_wrong_format_sn_hint
-        element = self.driver.find_element_by_xpath(ele)
+
+        element = ''
+        elements = self.driver.find_elements(By.XPATH, self.error_msg)
+        for ele in elements:
+            if ele.get_attribute('style') != 'display: none;':
+                element = ele
         assert element.text == msg
 
     def verify_product_info(self):
@@ -87,7 +83,7 @@ class WarrantyInfoPage(BasePage):
 
         #assert img.get_attribute('src') == self.correct_product_img_url
         element = self.driver.find_element(By.CSS_SELECTOR, self.result_dl_css)
-        dd = element.find_elements_by_xpath('//dd')
+        dd = element.find_elements(By.XPATH, '//dd')
         for m in range(len(dd)):
             assert dd[m].text == self.correct_product_info[m]
         img = self.driver.find_element(By.CSS_SELECTOR, self.result_image_css)
