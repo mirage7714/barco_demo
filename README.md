@@ -3,7 +3,8 @@
  At the same time, there are also some issues found during the test. 
  
 ## Target:  
-The url: https://www.barco.com/fr/clickshare/support/warranty-info
+The url: https://www.barco.com/en/clickshare/support/warranty-info
+The purpose is to test the function of searching SN for warranty info  
  
 ## Test cases:  
 In the test case sheet, it contains the following test cases:   
@@ -13,7 +14,7 @@ In the test case sheet, it contains the following test cases:
 - The search log on server side  
 - The error code handling  
 - Operation under mobile web
-- Switch between different languages
+- Switch between different languages  
  
 ## Issues:  
 During the testing, there are some defect:
@@ -21,11 +22,11 @@ During the testing, there are some defect:
 - The Explore button will overlap with the sn title when the language is not en  
  
 ## Test structure:
-The test is using page-object pattern: it contains tests and pages.  
-- Tests: contains all the test cases.  
-- Pages: contains the elements and functions of the pages. 
+The test is using page-object pattern: it contains tests and pages  
+- Tests: contains all the test cases  
+- Pages: contains the elements and functions of the pages  
 
 ## Automation test:  
 Steps for executing the automation test:  
-1. Enter the folder, and install the required packages: `pip install -r requirement.txt`  
-2. 
+1. Enter the project folder, and install the required packages: `pip install -r requirement.txt`  
+2. Open IDE (I use PyCharm), and execute the `test_warranty.py` for testing  
