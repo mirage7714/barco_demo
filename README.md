@@ -1,5 +1,9 @@
 # barco_demo
- Test cases for barco interview
+ This assignment is for barco interview. In this repo, it contains test cases for the requirement, and also the automation cases.  
+ At the same time, there are also some issues found during the test. 
+ 
+## Target:  
+The url: https://www.barco.com/fr/clickshare/support/warranty-info
  
 ## Test cases:  
 In the test case sheet, it contains the following test cases:   
