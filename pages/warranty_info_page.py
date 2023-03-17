@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 class WarrantyInfoPage(BasePage):
     def __init__(self, driver):
         self.valid_sn = '1863552437'
+        self.invalid_sn = '186355243'
         self.invalid_short_sn = '1'
         self.invalid_long_sn = '1111111111111111111111111111'
         self.sn_input = '//input[@id="SerialNumber"]'
@@ -18,7 +19,9 @@ class WarrantyInfoPage(BasePage):
         self.error_short_sn = 'Minimum 6 characters required'
         self.error_blank_sn = 'Please specify a serial number'
         self.error_long_sn = 'Please enter a valid serial number'
+        self.error_no_result = "We couldn't find a product with this serial number. Please double-check the serial number and try again."
 
+        self.result_no_match_css = '.c-bb-tile'
         self.result_query_sn_css = '.c-result-tile__highlight'
         self.result_dl_css = '.c-result-tile__dl'
         self.result_image_css = '.o-aspect-ratio__element'
@@ -59,11 +62,15 @@ class WarrantyInfoPage(BasePage):
         self.type_sn(self.invalid_long_sn)
         self.click_get_info_btn()
 
+    def search_invalid_sn(self):
+        self.type_sn(self.invalid_sn)
+        self.click_get_info_btn()
+
     def click_get_info_btn(self):
         element = self.driver.find_element(By.CSS_SELECTOR, self.query_btn_css)
         element.click()
 
-    def check_error_toast(self, type, msg):
+    def check_error_toast(self, msg):
         element = ''
         elements = self.driver.find_elements(By.XPATH, self.error_msg)
         for ele in elements:
@@ -84,11 +91,18 @@ class WarrantyInfoPage(BasePage):
         img = self.driver.find_element(By.CSS_SELECTOR, self.result_image_css)
         assert img.get_attribute('src') == self.correct_product_img_url
 
+    def verify_no_result_info(self):
+        WebDriverWait(self.driver, self.timeout).until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.result_query_sn_css)))
+        sn = self.driver.find_element(By.CSS_SELECTOR, self.result_query_sn_css)
+        assert sn.text == self.invalid_sn
+        element = self.driver.find_element(By.CSS_SELECTOR, self.result_no_match_css)
+        assert element.find_element(By.XPATH, './/div').find_element(By.XPATH, './/p').text == self.error_no_result
+
     def verify_blank_sn_error(self):
-        self.check_error_toast('blank', self.error_blank_sn)
+        self.check_error_toast(self.error_blank_sn)
 
     def verify_short_sn_error(self):
-        self.check_error_toast('short', self.error_short_sn)
+        self.check_error_toast(self.error_short_sn)
 
     def verify_long_sn_error(self):
-        self.check_error_toast('long', self.error_long_sn)
+        self.check_error_toast(self.error_long_sn)

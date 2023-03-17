@@ -1,6 +1,5 @@
 from base_test import *
 from pages.warranty_info_page import *
-import time
 
 class TestWarranty(BaseTest):
     def test_successful_query_info(self):
@@ -18,3 +17,9 @@ class TestWarranty(BaseTest):
         warranty_info_page.verify_short_sn_error()
         warranty_info_page.search_long_sn()
         warranty_info_page.verify_long_sn_error()
+
+    def test_query_with_no_result(self):
+        warranty_info_page = WarrantyInfoPage(self.driver)
+        warranty_info_page.dismiss_cookie_popup()
+        warranty_info_page.search_invalid_sn()
+        warranty_info_page.verify_no_result_info()
