@@ -85,7 +85,7 @@ class WarrantyInfoPage(BasePage):
         sn = self.driver.find_element(By.CSS_SELECTOR, self.result_query_sn_css)
         assert sn.text == self.valid_sn
         element = self.driver.find_element(By.CSS_SELECTOR, self.result_dl_css)
-        dd = element.find_elements(By.XPATH, '//dd')
+        dd = element.find_elements(By.XPATH, './/dd')
         for m in range(len(dd)):
             assert dd[m].text == self.correct_product_info[m]
         img = self.driver.find_element(By.CSS_SELECTOR, self.result_image_css)
